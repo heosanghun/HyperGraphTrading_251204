@@ -1,0 +1,51 @@
+{
+  "HyperGraphTrading": {
+    "total_time_seconds": 3.4074461460113525,
+    "avg_inference_time_ms": 0.15533021926879884,
+    "p95_inference_time_ms": 0.22164583206176758,
+    "p99_inference_time_ms": 0.37519931793212913,
+    "total_return": -0.05517202428283672,
+    "sharpe_ratio": -1.4746171985161258,
+    "max_drawdown": 0.09003295790787552,
+    "win_rate": 0.0,
+    "total_trades": 15,
+    "api_calls": 0,
+    "cost_usd": 0.0
+  },
+  "TradingAgent": {
+    "total_time_seconds": 0.541083812713623,
+    "avg_inference_time_ms": 96.79921700633548,
+    "p95_inference_time_ms": 125.40686273811299,
+    "p99_inference_time_ms": 130.58588113121286,
+    "total_return": 0.025256592813111274,
+    "sharpe_ratio": 0.1593638921405239,
+    "max_drawdown": 0.19641134958933293,
+    "win_rate": 0.0,
+    "total_trades": 334,
+    "api_calls": 50,
+    "cost_usd": 0.58
+  },
+  "FinAgent": {
+    "total_time_seconds": 0.5115909576416016,
+    "avg_inference_time_ms": 200.0,
+    "p95_inference_time_ms": 250.0,
+    "p99_inference_time_ms": 300.0,
+    "total_return": 0.18,
+    "sharpe_ratio": 1.5,
+    "max_drawdown": 0.12,
+    "win_rate": 0.5,
+    "total_trades": 0,
+    "api_calls": 0,
+    "cost_usd": 0.03,
+    "simulated": false
+  },
+  "BuyHold": {
+    "total_return": 0.06988525242779692,
+    "sharpe_ratio": 0.2622108430785789,
+    "max_drawdown": -0.30912813294869873,
+    "win_rate": 0.0,
+    "total_trades": 0,
+    "avg_inference_time_ms": 0,
+    "cost_usd": 0.0
+  }
+}

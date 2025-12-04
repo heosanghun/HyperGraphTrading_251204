@@ -1,0 +1,92 @@
+{
+  "experiment_date": "2025-12-04T12:01:49.274933",
+  "test_period": "2022-01-01 ~ 2023-12-31",
+  "symbols": [
+    "AAPL",
+    "MSFT"
+  ],
+  "baseline_comparison": {
+    "HyperGraphTrading": {
+      "total_time_seconds": 3.4393374919891357,
+      "avg_inference_time_ms": 0.15706829071044923,
+      "p95_inference_time_ms": 0.23152828216552732,
+      "p99_inference_time_ms": 0.3614687919616699,
+      "total_return": -0.055171987704467754,
+      "sharpe_ratio": -1.474617877391883,
+      "max_drawdown": 0.09003280431941557,
+      "win_rate": 0.0,
+      "total_trades": 15,
+      "api_calls": 0,
+      "cost_usd": 0.0
+    },
+    "TradingAgent": {
+      "total_time_seconds": 0.540557861328125,
+      "avg_inference_time_ms": 105.32600036283999,
+      "p95_inference_time_ms": 133.75505151180724,
+      "p99_inference_time_ms": 138.81434280798368,
+      "total_return": 0.025256211087037083,
+      "sharpe_ratio": 0.15936285106001158,
+      "max_drawdown": 0.19641145520381686,
+      "win_rate": 0.0,
+      "total_trades": 334,
+      "api_calls": 50,
+      "cost_usd": 0.58
+    },
+    "FinAgent": {
+      "total_time_seconds": 0.5111064910888672,
+      "avg_inference_time_ms": 200.0,
+      "p95_inference_time_ms": 250.0,
+      "p99_inference_time_ms": 300.0,
+      "total_return": 0.18,
+      "sharpe_ratio": 1.5,
+      "max_drawdown": 0.12,
+      "win_rate": 0.5,
+      "total_trades": 0,
+      "api_calls": 0,
+      "cost_usd": 0.03,
+      "simulated": false
+    },
+    "BuyHold": {
+      "total_return": 0.0698851608525254,
+      "sharpe_ratio": 0.2622106958735553,
+      "max_drawdown": -0.309128192082871,
+      "win_rate": 0.0,
+      "total_trades": 0,
+      "avg_inference_time_ms": 0,
+      "cost_usd": 0.0
+    }
+  },
+  "ablation_study": {
+    "Full Model": {
+      "total_time_seconds": 1.673387050628662,
+      "avg_inference_time_ms": 0.1559977912902832,
+      "p95_inference_time_ms": 0.23194551467895508,
+      "p99_inference_time_ms": 0.3468084335327155,
+      "total_return": -0.055171987704467754,
+      "sharpe_ratio": -1.474617877391883,
+      "max_drawdown": 0.09003280431941557,
+      "win_rate": 0.0,
+      "total_trades": 15,
+      "api_calls": 0,
+      "cost_usd": 0.0
+    },
+    "w/o Hypergraph": {
+      "total_return": -0.10694592603454457,
+      "sharpe_ratio": -0.23160923158163496,
+      "max_drawdown": 0.236050684456946,
+      "avg_inference_time_ms": 0.027242534888718656
+    },
+    "w/o Distillation": {
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "max_drawdown": 0.0,
+      "avg_inference_time_ms": 0.32925138286515776
+    },
+    "w/o Debate": {
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "max_drawdown": 0.0,
+      "avg_inference_time_ms": 0.008611621970901946
+    }
+  }
+}

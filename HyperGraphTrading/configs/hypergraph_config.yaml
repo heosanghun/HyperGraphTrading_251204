@@ -1,0 +1,36 @@
+# 하이퍼그래프 설정
+
+# 노드 타입 설정
+node_types:
+  stock:
+    features: ["open", "high", "low", "close", "volume", "adj_close"]
+    required: true
+  news:
+    features: ["title", "text", "sentiment", "source"]
+    required: false
+  sentiment:
+    features: ["score", "magnitude"]
+    required: false
+  economic:
+    features: ["indicator", "value", "change"]
+    required: false
+
+# 하이퍼엣지 설정
+hyperedge:
+  min_nodes: 2
+  max_nodes: 10
+  correlation_threshold: 0.3
+  update_frequency: "1d"  # daily update
+  
+# 상관관계 계산
+correlation:
+  method: "pearson"  # pearson, spearman
+  window_size: 30  # days
+  min_correlation: 0.3
+
+# 동적 업데이트
+dynamic:
+  enabled: true
+  update_interval: "1h"  # hourly
+  decay_factor: 0.95  # 가중치 감쇠
+
