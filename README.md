@@ -204,6 +204,36 @@ def propagate(self, company_name, trade_date):
     # 총 시간: 35-50초, 비용: $0.15-1.00
 ```
 
+#### FinAgent의 문제점
+```python
+# FinAgent: 멀티모달 순차적 LLM 호출
+def run(self, state, info, template, params, memory, provider):
+    # 1. 시장 지능 생성 (멀티모달 LLM 호출)
+    #    - 가격 데이터 → 텍스트 변환
+    #    - 뉴스 데이터 → 요약
+    #    - 차트 이미지 → GPT-4 Vision 분석
+    latest_mi = latest_market_intelligence_summary.run(...)  # 5-8초, $0.05-0.15
+    
+    # 2. 과거 시장 지능 생성
+    past_mi = past_market_intelligence_summary.run(...)  # 5-8초, $0.05-0.15
+    
+    # 3. Low-level Reflection (시장 동향 분석)
+    low_reflection = low_level_reflection.run(...)  # 3-5초, $0.03-0.10
+    
+    # 4. High-level Reflection (과거 결정 반성)
+    high_reflection = high_level_reflection.run(...)  # 3-5초, $0.03-0.10
+    
+    # 5. 최종 의사결정
+    decision = decision_trading.run(...)  # 2-4초, $0.02-0.08
+    
+    # 총 시간: 18-30초, 비용: $0.18-0.58
+    # 문제점:
+    # - 멀티모달 처리로 인한 높은 비용 (GPT-4 Vision)
+    # - 순차적 실행으로 인한 긴 대기 시간
+    # - 대용량 프롬프트 (모든 데이터를 프롬프트에 포함)
+    # - 실시간 처리 불가
+```
+
 #### HyperGraphTrading의 개선
 ```python
 # HyperGraphTrading: 하이퍼그래프 기반 병렬 계산
@@ -232,6 +262,13 @@ def generate_policy(self, symbol: str, date: str):
 - 총 실행 시간: 35-50초
 - 실시간 처리 불가
 
+**FinAgent**:
+- 멀티모달 순차적 LLM 호출: 시장 지능 → 반성 → 결정 (3단계)
+- GPT-4 Vision 사용으로 인한 높은 비용
+- 총 실행 시간: 18-30초
+- 대용량 프롬프트로 인한 긴 대기 시간
+- 실시간 처리 불가
+
 **HyperGraphTrading**:
 - 하이퍼그래프 기반 수치 계산: 0.01-0.05초/에이전트
 - 병렬 처리 가능
@@ -245,6 +282,22 @@ def generate_policy(self, symbol: str, date: str):
 # 각 LLM 호출마다 비용 발생
 response = llm.invoke(prompt)  # $0.03-0.10/호출
 # 총 5-10회 호출 = $0.15-1.00/결정
+```
+
+**FinAgent**:
+```python
+# 멀티모달 LLM 호출로 인한 높은 비용
+# 1. GPT-4 Vision (차트 이미지 분석)
+vision_response = gpt4_vision.invoke(image, prompt)  # $0.01/이미지 + $0.03/1K tokens
+
+# 2. GPT-4 (텍스트 요약)
+text_response = gpt4.invoke(large_prompt)  # $0.03/1K tokens
+
+# 3. 반성 모듈 (2회 호출)
+reflection_response = gpt4.invoke(reflection_prompt)  # $0.03-0.10/호출
+
+# 총 5회 호출 = $0.18-0.58/결정
+# 문제점: 멀티모달 처리로 인한 비용 증가
 ```
 
 **HyperGraphTrading**:
@@ -268,6 +321,24 @@ response = llm.invoke(prompt)  # 주관적 판단
 # 검증 방법: 없음
 ```
 
+**FinAgent**:
+```python
+# 멀티모달 데이터를 프롬프트에 모두 포함
+prompt = f"""
+Analyze the following data:
+- Price data: {price_data}  # 대용량 데이터
+- News: {news_data}         # 대용량 데이터
+- Chart image: [base64]     # 이미지 데이터
+- Expert guidance: {guidance_data}
+"""
+response = gpt4_vision.invoke(prompt, image)  # 주관적 판단
+# 문제점:
+# - 비구조화된 데이터 의존
+# - 검증 방법 없음
+# - 환각(Hallucination) 가능성
+# - 구조적 리스크 파악 실패
+```
+
 **HyperGraphTrading**:
 ```python
 # 전이 엔트로피로 인과관계 검증
@@ -285,12 +356,14 @@ def add_hyperedge(self, edge, verify_causality=True):
 
 | 항목 | TradingAgents | FinAgent | HyperGraphTrading |
 |------|---------------|----------|-------------------|
-| **근거 소스** | LLM 생성 텍스트 | 멀티모달 데이터 | 하이퍼그래프 수치 |
-| **검증 방법** | 주관적 판단 | 없음 | 전이 엔트로피 검증 |
-| **토론 방식** | LLM 재호출 | LLM 기반 | 수치 기반 가중 평균 |
-| **실행 시간** | 35-50초 | 10-20초 | 0.3초 / < 1ms |
-| **비용/결정** | $0.15-1.00 | $0.10-0.20 | $0.00 |
+| **근거 소스** | LLM 생성 텍스트 | 멀티모달 데이터 (비구조화) | 하이퍼그래프 수치 (구조화) |
+| **검증 방법** | 주관적 판단 | 없음 (환각 가능) | 전이 엔트로피 검증 |
+| **토론 방식** | LLM 재호출 | LLM 기반 (순차적) | 수치 기반 가중 평균 (병렬) |
+| **데이터 처리** | 텍스트 중심 | 멀티모달 (이미지+텍스트) | 구조화된 그래프 |
+| **실행 시간** | 35-50초 | 18-30초 | 0.3초 (System 2) / < 1ms (System 1) |
+| **비용/결정** | $0.15-1.00 | $0.18-0.58 (GPT-4 Vision) | $0.00 |
 | **실시간 처리** | ❌ 불가 | ❌ 불가 | ✅ 가능 |
+| **리스크 파악** | 제한적 | 구조적 리스크 파악 실패 | 하이퍼그래프 기반 구조적 분석 |
 
 ### 4. 핵심 모듈별 작동 원리
 
